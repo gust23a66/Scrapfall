@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EcoPlay</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="img/favicon.png" type="image/png">
+</head>
+<body>
+
+
+    <div id="gameContainer">
+          
+        <div id="loginScreen">
+            <h1> <img src="img/ecoplay_icon.png" alt="EcoPlay Ícone" class="ecoplay-header-icon"></h1>
+            <label for="username">Digite seu nome:</label>
+            <input type="text" id="username" placeholder="Seu nome...">
+           
+               <button onclick="showModoNovo()"> <img src="img/play.png" alt="Modo Coleta" class="collect-mode-icon"> Jogar </button>
+             <button id="rankingButton"> <img src="img/trofeu.png" alt="Troféu" class="menu-trophy-icon"> Ranking</button> 
+         
+             <button id="audioControlsButton"> <img src="img/audio.png" alt="Áudio" class="menu-audio-icon">  Áudio</button> 
+        
+            <div class="align-buttons-horizontal">
+              
+               <button id="fullscreenButton" onclick="toggleFullScreen()"><img src="img/fullscreen.png" alt="Tela Cheia" class="menu-fullscreen-icon"> Tela Cheia </button>
+            </div>
+            
+        </div>
+        
+         <div id="feedbackMenu" class="message" style="display: none;"></div>
+
+      <div id="audioSettingsScreen" style="display: none;">
+            <h2>🔊 Configurações de Áudio</h2>
+            
+            <div class="volume-control">
+                <label for="musicVolume">Volume da Música:</label>
+                <input type="range" id="musicVolume" min="0" max="1" step="0.01" value="1"> 
+            </div>
+
+            <div class="volume-control">
+                <label for="sfxVolume">Volume dos Efeitos Sonoros:</label>
+                <input type="range" id="sfxVolume" min="0" max="1" step="0.01" value="1">
+            </div>
+
+            <button id="backToLoginFromAudio">⬅ Voltar</button>
+        </div>
+       
+<div id="shopScreen" style="display:none;">
+  <h2>Loja</h2>
+  
+<div id="moedasDisplayShop" style="font-weight:bold; margin-bottom: 12px;">
+  <img src="img/moeda.png" alt="Moedas" class="coin-icon"> <span id="moedasQtdShop">0</span>
+</div>
+  <div id="skinsSection">
+  <div id="powerupsSection">
+    <h3>Power-ups</h3>
+    <div id="powerupsList"></div>
+  </div>
+
+    <h3>Skins de Lixeira</h3>
+    <div id="skinsList"></div>
+  </div>
+
+  <button id="backToLoginFromShop">Voltar</button>
+</div>
+
+        
+        <div id="difficultyScreen" style="display: none;">
+            <h1> <img src="img/ecoplay_icon.png" alt="EcoPlay Ícone" class="ecoplay-header-icon"></h1>
+    <h2>Escolha a Dificuldade</h2>
+
+    <button class="difficultyBtn" data-dificuldade="facil">
+       Fácil <img src="img/facil.png" alt="Ícone dificuldade fácil">
+        
+    </button>
+
+    <button class="difficultyBtn" data-dificuldade="medio">
+       Médio  <img src="img/medio.png" alt="Ícone dificuldade média">  
+       
+    </button>
+
+    <button class="difficultyBtn" data-dificuldade="dificil">
+        Difícil <img src="img/dificil.png" alt="Ícone dificuldade difícil"> 
+       
+    </button>
+</div>
+
+      <div id="gameScreen" style="display: none;">
+
+         <h1> <img src="img/ecoplay_icon.png" alt="EcoPlay Ícone" class="ecoplay-header-icon"></h1>
+
+
+<div class="multiplier-icon-container">
+        <img id="multiplierFireIcon" src="img/fire_icon.png" alt="Multiplicador Ativo"> <span class="multiplier-tooltip-message">Essa partida possuir multiplicador de moedas!</span>
+    </div>
+
+     <div id="moedasDisplay" style="font-weight:bold; margin-top: 8px;">
+  <img src="img/moeda.png" alt="Moedas" class="coin-icon"> <span id="moedasQtd">0</span> | Pontuação: <span id="scoreValue">0</span> | <span id="errorCount">Erros: 0/3</span>
+</div>
+    <h2 id="themeTitle"></h2>
+    
+    <p id="questionText"></p>
+    <div id="options"></div>
+     <div id="feedbackMessage" class="message" style="display: none;"></div>
+ 
+    
+    <div id="powerupsQuiz" style="margin: 8px 0;">
+        <button id="btnPararTempo">
+            <img src="img/powerup_time.png" alt="Parar Tempo" style="width:20px;vertical-align:middle;">
+            (<span id="qtdPararTempo">0</span>)
+        </button>
+        <button id="btnPularPergunta">
+            <img src="img/powerup_skip.png" alt="Pular Pergunta" style="width:20px;vertical-align:middle;">
+            (<span id="qtdPularPergunta">0</span>)
+        </button>
+        
+    </div>
+
+    
+   <div id="statusBar" style="display: flex; justify-content: center; gap: 24px; align-items: center; margin-top: 8px;">
+    <p id="timeLeft" style="margin: 0;"></p>
+    
+</div>
+    
+</div>
+
+        <div id="rankingScreen" style="display: none;">
+
+    
+    <h3><img src="img/parafuso.png" alt="Coleta" class="ranking-header-icon"> Ranking </h3>
+    <div id="rankingColetaList"></div>
+    <button id="backToLogin" style="margin-top: 20px;">Voltar</button>
+</div>
+       <div id="achievementsScreen" style="display: none;">
+            <h2><img src="img/medal_icon.png" alt="Conquistas" class="achievements-header-icon"> Conquistas</h2>
+            <div id="achievementsList"></div>
+            <button id="backToLoginFromAchievements">Voltar</button>
+        </div>
+
+       
+        <div id="modonovoScreen" style="display:none">
+            
+          <div id="pauseMenu">
+    <h2><img src="img/pause.png" alt="Jogo Pausado" class="pause-header-icon"> Jogo Pausado</h2>
+    
+    <button onclick="togglePause()"><img src="img/play.png" alt="Retomar" class="pause-btn-icon"> Retomar</button>
+    
+    <button onclick="restartGame()"><img src="img/restart.png" alt="Reiniciar" class="pause-btn-icon"> Reiniciar</button>
+    
+    <button onclick="toggleFullScreen()"> <img src="img/fullscreen.png" alt="Tela Cheia" class="pause-menu-fullscreen-icon"> Tela Cheia</button>
+    
+    <button onclick="hideModoNovo()"><img src="img/voltar.png" alt="Voltar" class="pause-btn-icon"> Voltar ao Menu</button>
+</div>
+            
+            <div id="modonovoGameContainer">
+                <div id="topBar">
+                    <div id="livesContainer"></div>
+                    <div id="scoreBoard">Pontuação: <span id="score">0</span></div>
+                  <button id="pauseButton" onclick="togglePause()">
+  <img id="pauseIcon" src="img/pause.png" alt="Pausar" style="width: 70%; height: 70%;">
+</button>
+                </div>
+                <div id="canvasWrapper">
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+            </div>
+            
+            <div id="gameOverScreen">
+                <h2 id="finalScore"></h2>
+                
+                <button onclick="restartGame()">↻ Reiniciar</button>
+                <button onclick="hideModoNovo()" style="margin-top: 10px;">⬅ Voltar ao Menu</button>
+            </div>
+        </div>
+    </div>
+
+   
+
+ 
+    <div id="gameOverMessage" class="message" style="display: none;">
+        <h1> <img src="img/ecoplay_icon.png" alt="EcoPlay Ícone" class="ecoplay-header-icon"></h1>
+        <h2 id="finalScoreQuiz"></h2>
+        <button id="restartButton">Reiniciar</button>
+        <button id="menuButton">Menu</button>
+        <button id="exitButton">Sair</button>
+    </div>
+
+    <div id="winScreen" class="screen" style="display: none;">
+        <div class="message">
+            <h2>🎉 Parabéns!</h2>
+            <p id="finalScoreWin"></p>
+            <button id="restartButtonWin">Jogar Novamente</button>
+            <button id="menuButtonWin">Menu Principal</button>
+        </div>
+        <div id="sessionAchievements" class="session-achievements"></div>
+    </div>
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>

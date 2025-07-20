@@ -207,7 +207,7 @@ button:hover {
 }
 
 
-.dark-mode #loginScreen label {
+.dark-mode #loginScreen  {
     color: #bcbbbb; 
 }
 
@@ -2252,4 +2252,5 @@ body.dark-mode #shopScreen .skin-cost {
     color: #f5f5f5 !important;
   }
 }
+
 

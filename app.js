@@ -69,6 +69,12 @@ function showModoNovo() {
     } else {
         currentPlayerName = "Anônimo";
     }
+
+     try {
+        audio.play();
+    } catch (e) {
+        console.error("Erro ao tocar música de fundo:", e);
+    }
     
     // Define a fonte das imagens antes de pré-carregar
     roboImg.src = skinSelecionada;
@@ -235,9 +241,9 @@ function updateGame() {
         t.y += fallSpeed;
         const imgMap = {
             'bug': bugImg, 'falha': falhaImg, 'fogo': fogoImg, 'agua': aguaImg,
-            'energia': energiaImg, 'chave': chaveImg, 'glass': atuadoresImg,
+            'energia': energiaImg, 'chave': chaveImg, 'atuadores': atuadoresImg,
             'manipulador': manipuladorImg, 'heart': heartItemImg, 'transmissor': transmissorImg,
-            'sensor': sensorImg, 'recycle': parafusoImg
+            'sensor': sensorImg, 'parafuso': parafusoImg
         };
         const img = imgMap[t.type] || parafusoImg;
         if (img.complete) ctx.drawImage(img, t.x, t.y, t.width, t.height);
@@ -247,22 +253,27 @@ function updateGame() {
             continue;
         }
 
-        const colidiu = t.x < player.x + player.width && t.x + t.width > player.x && t.y + t.height > player.y;
-        if (colidiu) {
-            if (['fogo', 'bug', 'falha', 'agua'].includes(t.type)) {
-                lives--;
-                drawHearts();
-                if (lives <= 0) endGame();
-            } else if (t.type === 'heart') {
-                if (lives < 3) lives++;
-                drawHearts();
-            } else {
-                const scoreMap = { 'recycle': 1, 'transmissor': 1, 'sensor': 2, 'chave': 2, 'manipulador': 3, 'glass': 4, 'energia': 10 };
-                score += scoreMap[t.type] || 0;
-                document.getElementById('score').innerText = score;
-            }
-            trash.splice(i, 1);
-        }
+       // Dentro da função updateGame, localize este trecho e adicione as linhas com .play()
+
+        const colidiu = t.x < player.x + player.width && t.x + t.width > player.x && t.y + t.height > player.y;
+        if (colidiu) {
+            if (['fogo', 'bug', 'falha', 'agua'].includes(t.type)) {
+                lives--;
+                erroAudio.play(); // <--- ADICIONE ESTA LINHA
+                drawHearts();
+                if (lives <= 0) endGame();
+            } else if (t.type === 'heart') {
+                if (lives < 3) lives++;
+                acertoAudio.play(); // <--- ADICIONE ESTA LINHA (som de acerto para vida extra)
+                drawHearts();
+            } else {
+                const scoreMap = { 'recycle': 1, 'transmissor': 1, 'sensor': 2, 'chave': 2, 'manipulador': 3, 'glass': 4, 'energia': 10 };
+                score += scoreMap[t.type] || 0;
+                acertoAudio.play(); // <--- ADICIONE ESTA LINHA (som de acerto para pontos)
+                document.getElementById('score').innerText = score;
+            }
+            trash.splice(i, 1);
+        }
     }
     
     player.y = canvas.height - player.height;
@@ -343,6 +354,40 @@ function updateColetaRanking(name, scoreToSave) {
 // INICIALIZAÇÃO E EVENT LISTENERS
 // =============================================================
 
+// =============================================================
+// FUNÇÕES DE CONTROLE DE ÁUDIO
+// =============================================================
+function setupAudioControls() {
+    const musicVolumeSlider = document.getElementById('musicVolume');
+    const sfxVolumeSlider = document.getElementById('sfxVolume');
+
+    if (musicVolumeSlider) {
+        // Define o valor inicial do slider com base no volume atual do áudio
+        musicVolumeSlider.value = audio.volume; 
+        
+        musicVolumeSlider.addEventListener('input', (e) => {
+            // Pega o valor do slider (que já está entre 0 e 1) e aplica ao volume
+            const newVolume = parseFloat(e.target.value); 
+            audio.volume = newVolume;
+        });
+    }
+
+    if (sfxVolumeSlider) {
+        // Define o valor inicial para os efeitos sonoros
+        sfxVolumeSlider.value = acertoAudio.volume;
+
+        sfxVolumeSlider.addEventListener('input', (e) => {
+            // Pega o valor do slider e aplica aos efeitos sonoros
+            const newVolume = parseFloat(e.target.value);
+            // Altera o volume de AMBOS os efeitos sonoros ao mesmo tempo
+            acertoAudio.volume = newVolume;
+            erroAudio.volume = newVolume;
+        });
+    }
+}
+
+
+
 function setupEventListeners() {
     const buttonActions = {
         "startButton": showModoNovo,
@@ -397,6 +442,7 @@ function setupEventListeners() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
-    showLoginScreen();
+    setupEventListeners();
+    setupAudioControls(); // <--- ADICIONE ESTA LINHA
+    showLoginScreen();
 });
